@@ -1,24 +1,24 @@
 #include <Arduino.h>
 #include "Controller.h"
 
-Controller::Controller(float Cp,float Ci,float Cd) : Cp(Cp), Ci(Ci), Cd(Cd) {}
+Controller::Controller(double Cp,double Ci,double Cd) : Cp(Cp), Ci(Ci), Cd(Cd) {}
 
-float Controller::Proportional(int error){
+double Controller::Proportional(double error){
   return (error * Cp);
 };
 
-float Controller::Integral(int error){
-  int ESum = ESum + error;
+double Controller::Integral(double error){
+  ESum = ESum + error;
   return ESum;
 };
 
-float Controller::Derivative(int error){
-  int Ediff = error - Emem;
+double Controller::Derivative(double error){
+  double Ediff = error - Emem;
   Emem = error;
   return Ediff;
 };
 
-float Controller::PID(int error){
+double Controller::PID(double error){
   int gain = Controller::Proportional(error) + Controller::Integral(error) + Controller::Derivative(error);
   return(gain);
     };

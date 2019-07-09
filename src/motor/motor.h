@@ -5,7 +5,7 @@
 // The arduino treats ESCs as Servos
 
 // The speed at idle
-#define minSpeed 1175
+#define minSpeed 1125
 
 // Constructs two ESCs in motor.cpp
 extern Servo esc_0;

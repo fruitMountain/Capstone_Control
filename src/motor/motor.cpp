@@ -21,12 +21,12 @@ void escSetup () {
   delay(5000);
 
   // Ramps speed up to idle
-  for (int i = 1000; i < minSpeed; i++) {
+  /*for (int i = 1000; i < minSpeed; i++) {
     esc_0.writeMicroseconds(i);
     esc_1.writeMicroseconds(i);
     delay(100);
-  }
-};
+    }*/
+  };
 
 // A function to apply a speed to the motors
 void turnMotor (int speed0, int speed1) {
