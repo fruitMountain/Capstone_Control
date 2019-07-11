@@ -8,14 +8,18 @@ double Controller::Proportional(double error){
 };
 
 double Controller::Integral(double error){
-  ESum = ESum + error;
-  return ESum;
+  ESum = ESum + (error * Ci);
+  if (ESum >  1000) {ESum =  1000;}
+  if (ESum < -1000) {ESum = -1000;}
+
+  return (ESum);
 };
 
 double Controller::Derivative(double error){
-  double Ediff = error - Emem;
+  double Ediff = Emem - error;
   Emem = error;
-  return Ediff;
+
+  return (Ediff * Cd);
 };
 
 double Controller::PID(double error){

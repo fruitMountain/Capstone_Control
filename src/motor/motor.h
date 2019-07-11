@@ -6,10 +6,12 @@
 
 // The speed at idle
 #define minSpeed 1125
+#define maxSpeed 1500
 
 // Constructs two ESCs in motor.cpp
 extern Servo esc_0;
 extern Servo esc_1;
+extern int speed0, speed1;
 
 /* Setup ESCs
 
@@ -28,4 +30,5 @@ extern Servo esc_1;
 
 // Function definitions in motor.cpp or README
 void escSetup ();
-void turnMotor (int speed0, int speed1);
+void turnMotor (double control);
+void printMotor ();
