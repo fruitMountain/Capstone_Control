@@ -5,6 +5,10 @@
 sample record[historyLen];
 int8_t counter = 0;
 
+float alpha = 0.06;
+float angle = 0;
+unsigned long time = 0;
+
 
 //Turns on the MPU and wets the sample history.
 void mpuSetup () {
@@ -74,7 +78,6 @@ void sample::read () {
   this->gyroY = Wire.read()<<8|Wire.read();
   // 0x47 (GYRO_ZOUT_H) & 0x48 (GYRO_ZOUT_L)
   this->gyroZ = Wire.read()<<8|Wire.read();
-
 };
 
 // Moves to the next sample and updates it.
@@ -92,4 +95,16 @@ void switchSample () {
 sample* getSample () {
   switchSample();
   return &record[counter];
+};
+
+double complementary (sample* data) {
+  double gyro = -1 * ((millis()-time)/1000.)*(22 + data->gyroY) / (10500000000.);
+
+  double rads = 95.0 - (atan2(data->acclZ , data->acclX) * (180.0/3.14));
+
+  time = micros();
+
+  angle = (1-alpha)*(angle + gyro) + (alpha)*(rads);
+
+  return angle;
 };

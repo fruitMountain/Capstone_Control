@@ -10,6 +10,12 @@
 //Defined in controller.h
 Controller ctrl(2.4, 0.15, .3);
 
+int debug = 0;
+
+sample* data;
+double error;
+int pid;
+
 void setup () {
   Serial.begin(9600);
 
@@ -23,16 +29,16 @@ void setup () {
 
 void loop() {
 
-  sample* data = getSample();
-  double angle = atan2(data->acclZ , data->acclX) * (180/3.14);
-  error = 90 - angle;
-  double pid = ctrl.PID(error);
+  data = getSample();
+  error = complementary(data);
+  pid = ctrl.PID(error);
 
   turnMotor(pid);
 
+
   if (debug == 1) {
     printMotor();
-    Serial.println(error);Serial.print("\t");
+    Serial.print(error);Serial.print("\t");
     Serial.println(pid);
   }
 }

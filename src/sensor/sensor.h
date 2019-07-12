@@ -4,7 +4,6 @@
 #include <Arduino.h>
 
 
-
 // I2C address of the MPU-6050
 const int MPU_addr=0x68;
 
@@ -15,16 +14,22 @@ class sample {
   int acclX, acclY, acclZ;
   int gyroX, gyroY, gyroZ;
   int temp;
+  int angle;
 
   // Updates sensor data
   void read ();
 };
 
+// Some variables for filtering
+extern float alpha;
+extern float angle;
+extern unsigned long time;
 
 // Find function definitions in sensor.cpp or README
-void mpuSetup();
-void switchSample();
-sample* getSample();
+void mpuSetup ();
+void switchSample ();
+sample* getSample ();
+double complementary (sample* data);
 
 //Makes an array to store samples
 #define historyLen 5

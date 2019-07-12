@@ -10,42 +10,47 @@ void escSetup () {
   esc_0.attach(9);
   esc_1.attach(10);
 
+  if (debug != 1){
   // Wait for input
   Serial.println("When you're ready press any key.");
   while (!Serial.available());
   Serial.read();
+  }
 
   // Send Stop Command
   esc_0.writeMicroseconds(2000);
   esc_1.writeMicroseconds(2000);
 
+  if (debug != 1) {
   // Wait for input
   Serial.println("After two beeps press any key.");
   while (!Serial.available());
   Serial.read();
+  }
+  else {
+    delay(5000);
+  }
 
   // Send Start Command
   esc_0.writeMicroseconds(1000);
   esc_1.writeMicroseconds(1000);
 
+  if (debug != 1) {
   // Wait for input
   Serial.println("After three beeps press any key.");
   while (!Serial.available());
   Serial.read();
-
-  // Ramps speed up to idle
-  /*for (int i = 1000; i < minSpeed; i++) {
-    esc_0.writeMicroseconds(i);
-    esc_1.writeMicroseconds(i);
-    delay(100);
-    }*/
-  };
+  }
+  else {
+    delay(5000);
+  }
+};
 
 // A function to apply a speed to the motors
 void turnMotor (double control) {
   if (control >= 0) {
-    speed0 = minSpeed + control;
-    speed1 = minSpeed;
+    speed0 = idleSpeed + control;
+    speed1 = idleSpeed - control;
 
     if (speed0 < minSpeed) {speed0 = minSpeed;}
     if (speed1 < minSpeed) {speed1 = minSpeed;}
@@ -55,8 +60,8 @@ void turnMotor (double control) {
   }
 
   if (control < 0) {
-    speed0 = minSpeed;
-    speed1 = minSpeed - control;
+    speed0 = idleSpeed + control;
+    speed1 = idleSpeed - control;
 
     if (speed0 < minSpeed) {speed0 = minSpeed;}
     if (speed1 < minSpeed) {speed1 = minSpeed;}
@@ -67,7 +72,6 @@ void turnMotor (double control) {
 
   esc_0.writeMicroseconds(speed0);
   esc_1.writeMicroseconds(speed1);
-
 };
 
 void printMotor () {

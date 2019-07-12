@@ -9,8 +9,8 @@ double Controller::Proportional(double error){
 
 double Controller::Integral(double error){
   ESum = ESum + (error * Ci);
-  if (ESum >  1000) {ESum =  1000;}
-  if (ESum < -1000) {ESum = -1000;}
+  if (ESum >  200) {ESum =  200;}
+  if (ESum < -200) {ESum = -200;}
 
   return (ESum);
 };
