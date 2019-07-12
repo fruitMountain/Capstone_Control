@@ -36,6 +36,9 @@ This function moves the counter variable along to the next term in the record ar
 #### The getSample Function
 This updates a sample and returns a pointer to it.
 
+#### The Complementary function
+This essentially turns your sample into an angle. It happens to use a complementary filter, hence the name. This works by low passing the somewhat noisy accelerometer data, and high passing the gyroscope data to correct for drift, then adding them together.
+
 ### Motor.h
 This is a header file to control the ESCs used in the Seesaw. There isn't much going on in here, but it makes it easy to switch ESCs if that were to come up, without searching other code for where the motors are interacted with.
 
