@@ -8,13 +8,9 @@
 #include "src/controller/controller.h"
 
 //Defined in controller.h
-Controller ctrl(2.4, 0.15, .3);
+Controller ctrl(1.125, 0, 0);
 
 int debug = 0;
-
-sample* data;
-double error;
-int pid;
 
 void setup () {
   Serial.begin(9600);
@@ -29,11 +25,19 @@ void setup () {
 
 void loop() {
 
-  data = getSample();
-  error = complementary(data);
-  pid = ctrl.PID(error);
+  double test = 0.0001 * map(analogRead(A0),0,1023,0,100);
+  ctrl.changeI(test);
+
+  sample* data = getSample();
+  double error = complementary(data);
+  int pid = ctrl.PID(error);
 
   turnMotor(pid);
+
+
+  //Serial.print(millis());Serial.print("\t");
+  Serial.print(error);Serial.print("\t");
+  Serial.println(test);
 
 
   if (debug == 1) {
