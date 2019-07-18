@@ -7,7 +7,6 @@ int8_t counter = 0;
 
 float alpha = 0.06;
 float angle = 0;
-unsigned long time = 0;
 
 
 //Turns on the MPU and wets the sample history.
@@ -31,19 +30,19 @@ void mpuSetup () {
   Wire.beginTransmission(MPU_addr);
   // Accelerometer config register
   Wire.write(0x1C);
-  // set to most course reading
-  Wire.write(0b00011000);
+  // set to 8G max reading
+  Wire.write(0b00010000);
   Wire.endTransmission(true);
 
   Wire.beginTransmission(MPU_addr);
   // Gyro config register
   Wire.write(0x1B);
-  // set to most course reading
-  Wire.write(0b00011000);
+  // set to 500 deg/sec max
+  Wire.write(0b00001000);
   Wire.endTransmission(true);
 
   //Fill up the "record" vector.
-  for (int i=0; i < 5; i++) {
+  for (int i=0; i <= 5; i++) {
     switchSample();
   }
 
@@ -98,11 +97,8 @@ sample* getSample () {
 };
 
 double complementary (sample* data) {
-  double gyro = -1 * ((millis()-time)/1000.)*(22 + data->gyroY) / (10500000000.);
-
-  double rads = 95.0 - (atan2(data->acclZ , data->acclX) * (180.0/3.14));
-
-  time = micros();
+  double gyro = data->gyroY * (-500.0 / 32767) * dt;
+  double rads = 90.0 - (atan2(data->acclZ , data->acclX) * (180.0/3.14));
 
   angle = (1-alpha)*(angle + gyro) + (alpha)*(rads);
 

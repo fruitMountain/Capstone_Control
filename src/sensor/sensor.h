@@ -5,7 +5,7 @@
 
 
 // I2C address of the MPU-6050
-const int MPU_addr=0x68;
+#define MPU_addr 0x68
 
 
 // Holds Gyro and Accelerometer data
@@ -23,7 +23,7 @@ class sample {
 // Some variables for filtering
 extern float alpha;
 extern float angle;
-extern unsigned long time;
+extern float dt;
 
 // Find function definitions in sensor.cpp or README
 void mpuSetup ();
