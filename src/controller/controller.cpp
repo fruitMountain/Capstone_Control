@@ -8,8 +8,7 @@ double Controller::Proportional (double error){
 };
 
 double Controller::Integral (double error){
-  ESum = ESum + (error * (micros() - dt)/1000);
-  dt = micros();
+  ESum = ESum + (error * dt);
   return (ESum * Ci);
 };
 
@@ -21,18 +20,36 @@ double Controller::Derivative (double error){
 };
 
 double Controller::PID (double error){
+  //Serial.println(Cp);
   int gain = Controller::Proportional(error) + Controller::Integral(error) + Controller::Derivative(error);
   return(gain);
     };
 
-void Controller::changeP (double param) {
-  Cp = param;
-}
+void Controller::getInt (double& Int) {
+  if (Serial.available() >= 1) {
+    int i = 0;
+    int t = 0;
+    while (t == 0) {
+      char c = Serial.read();
+      if (isDigit(c)) {
+        i  =  (10 * i) + (c - '0');
+      }
+      else {
+        t = 1;
+      }
+    }
+    Int = i/1000.0;
+  }
+};
 
-void Controller::changeI (double param) {
-  Ci = param;
-}
+void Controller::changeP () {
+  getInt(Cp);
+};
 
-void Controller::changeD (double param) {
-  Cd = param;
-}
+void Controller::changeI () {
+  getInt(Ci);
+};
+
+void Controller::changeD () {
+  getInt(Cd);
+};

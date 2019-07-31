@@ -28,6 +28,7 @@ void escSetup () {
   Serial.read();
   }
   else {
+    Serial.println(2000);
     delay(5000);
   }
 
@@ -42,6 +43,7 @@ void escSetup () {
   Serial.read();
   }
   else {
+    Serial.println(1000);
     delay(5000);
   }
 };

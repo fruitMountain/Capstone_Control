@@ -1,6 +1,24 @@
 # Quadcopter Controller
 
-<!-- toc -->
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
+**Table of Contents**
+
+- [Quadcopter Controller](#quadcopter-controller)
+    - [Project Information](#project-information)
+    - [How to use this code](#how-to-use-this-code)
+        - [Sensor.h](#sensorh)
+            - [Keeping Track of Samples](#keeping-track-of-samples)
+            - [The Sample Class](#the-sample-class)
+            - [The switchSample Function](#the-switchsample-function)
+            - [The getSample Function](#the-getsample-function)
+            - [The Complementary function](#the-complementary-function)
+        - [Motor.h](#motorh)
+            - [The escSetup Function](#the-escsetup-function)
+            - [The turnMotor Function](#the-turnmotor-function)
+    - [Calibrating the Sensor](#calibrating-the-sensor)
+
+<!-- markdown-toc end -->
+
 
 ## Project Information
 + What?
@@ -49,3 +67,6 @@ This function was mostly written by Preston Stephens, as part of the 2018-19 tea
 
 #### The turnMotor Function
 This is relatively simple. You pass it two integers between 1000 and 2000, then it turns the motors at those two speeds
+
+## Calibrating the Sensor
+The sensor's sensitivity can be changed in the mpuSetup function. The lines commented "config register" allow you to change the settings of sensors on the MPU-6050 by setting certain bits high or low. More information can be found in the MPU-6050 register map.

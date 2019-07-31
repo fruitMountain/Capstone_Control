@@ -8,9 +8,9 @@
 #include "src/controller/controller.h"
 
 //Defined in controller.h
-Controller ctrl(1.125, 0, 0);
+Controller ctrl(2.0,0.5,.918);
 
-int debug = 0;
+int debug = 1;
 
 unsigned long time;
 float dt;
@@ -22,58 +22,70 @@ void setup () {
     mpuSetup is defined in sensor.h
     escSetup is defined in motor.h  */
   mpuSetup();
-  //escSetup();
+  escSetup();
 }
 
-double aHist;
-double gHist;
-double fHist;
-
-
+char c;
 void loop() {
-  /*
-  double test = 0.0001 * map(analogRead(A0),0,1023,0,100);
-  ctrl.changeI(test);
-  */
+
+  //double test = 0.1 * map(analogRead(A0),0,1023,0,50);
+  if (Serial.available()){
+    c = Serial.read();
+  }
+
+
+  switch (c) {
+  case 'P':
+    ctrl.changeP();
+    c = 'L';
+  case 'I':
+    ctrl.changeI();
+    c = 'L';c
+  case 'I':
+    ctrl.changeP();
+    c = 'L';
+  default:
+    break;
+  }
+
+
 
   dt = (millis() - time) / 1000.0;
   time = millis();
 
   sample* data = getSample();
-  double error = complementary(data);
-  int pid = ctrl.PID(error);
+  double error = data->pitch / -16.0;
+  //double error1 = complementary(data, 10);
+  //double error2 = complementary(data, 100);
+  int pid = ctrl.PID(-1*error);
 
-  //turnMotor(pid);
-
-  float test1 = data->acclX * 8.0 / 32767;
-  float test2 = data->acclZ * 8.0 / 32767;
+  turnMotor(pid);
 
 
-  //Serial.print(millis());Serial.print("\t");
-  //Serial.print((data->acclZ),HEX);Serial.print(",");
-  //Serial.println(error);
+
+  Serial.print(millis() / 1000.);Serial.print("\t");
+  //Serial.print(error);Serial.print(",");
+  Serial.println(pid);
   //Serial.println((180/3.14) * atan2(data->gyroX , data->gyroZ));
 
-  float fc = 4;
-  double alph = 1 / (2*3.14*fc*dt +1);
-  double g = data->gyroY * (-500.0 / 32767);
 
-  double filt = alph*fHist + (1-alph)*(g - gHist);
-  gHist = g;
-  fHist = filt;
+  //Serial.print(atan2(data->acclX, data->acclZ)*(180/3.13));Serial.print(",");
+  //Serial.print(error);Serial.print(",");
+  //Serial.print(error1);Serial.print(",");
+  //  Serial.print(dt);Serial.print(",");
+  //Serial.print(data->acclX);Serial.print(",");
+  //Serial.print(data->acclZ);Serial.print(",");
+  //Serial.println(data->gyroY);
 
-  alph = alph * 2*3.14*fc*dt;
-  double acc = 90.0 - (atan2(data->acclZ , data->acclX) * (180.0/3.14));;
-  double afilt = alph*acc + (1-alph)*aHist;
-  aHist = afilt;
-
-
-  //Serial.print(acc);Serial.print(",");
-  Serial.println(afilt+filt*dt);
+  //Serial.print();Serial.print(",");
+  //Serial.println(test.filter(atan2(data->acclX, data->acclZ)*(180/3.13),1,dt));
+  //Serial.print(millis() / 1000.0);Serial.print(",");
+  //Serial.println(error);
+  //delay(100);
 
   if (debug == 1) {
-    printMotor();
-    Serial.print(error);Serial.print(",");
-    Serial.println(pid);
+    //printMotor();
+    //Serial.print(error);Serial.print(",");
+    //Serial.println(pid);
   }
 }
