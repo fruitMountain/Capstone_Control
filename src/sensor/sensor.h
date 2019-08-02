@@ -16,7 +16,6 @@ class sample {
   int acclX = 0, acclY = 0, acclZ = 0;
   int gyroX = 0, gyroY = 0, gyroZ = 0;
   int temp = 0;
-  int angle = 0;
 
   int roll = 0, pitch = 0, heading = 0;
 

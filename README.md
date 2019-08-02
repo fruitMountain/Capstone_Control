@@ -21,18 +21,15 @@
 
 
 ## Project Information
-+ What?
-  - A capstone design project at the University of Idaho
-+ Who?
-  - Seth Berryhill as part of the Multi-rotor Drone Control System Project
-+ Why?
-  - We are building research tools for future scientists here the UIdaho to experiment with unmanned aircraft.
+This software was developed by a team of University of Idaho students working to create a multi-rotor drone for use in research, for fields such as control theory and environmental monitoring.
 
 ## How to use this code
-I wrote some functions to make life easier when your trying to rework this and control a new system or do something else fun, like implementing optimal control. Here they are listed by header file and defined.
+Each header file has a few functions and classes to help get rotor-craft up and running. Here they are broken down by header file, each of which is centered on a particular part or function.
 
 ### Sensor.h
-This file is used to interface with an MPU, please write down which MPU you have written for so it's easier to keep track. The only function I would expect to be used in a main function is "getSample". The funny business here is that we are storing data in an array of "sample" objects. The other funny business is the Russian doll set of functions.
+This file is used to interface with an MPU, and is already set up to interface with a MPU6050 or a BNO055. In "sensor.h" line 11 there is a preprocessor directive which allows you to choose which sensor to use.
+
+The only function I would expect to be used in a main function is "getSample", which returns a pointer to the most recent sensor data in a sample object. These are handled with a few nested functions to perform the necessary operations to handle this format.
 
 #### Keeping Track of Samples
 There are three main parts to keeping track, internally, of what the sensor is reading.
@@ -46,13 +43,16 @@ There are three main parts to keeping track, internally, of what the sensor is r
 #### The Sample Class
 Each sample holds information from an accelerometer and a gyroscope in the X, Y, and Z axes, as well as the internal temperature of the MPU. The sample class also contains a member function, "read", that updates the sample it is pointed to. The read function is called with the syntax:
 
-    object.sample::read();
+    object.sample::read(**;
 
 #### The switchSample Function
-This function moves the counter variable along to the next term in the record array, then updates that sample object using the read function. This is the second Russian doll, because the only use for the read function is to be called here, and the only use for this function is to be called by the getSample function.
+The purpose of this function is the move to the next sample in the record array and to update its sensor reading. It accomplishes this by using the read function, which reads from registers in the sensor.
 
 #### The getSample Function
 This updates a sample and returns a pointer to it.
+
+### Filter.h
+housed within the sensor directory this header defines a number of filter objects you can use to clean unwanted signals from your sensor data.
 
 #### The Complementary function
 This essentially turns your sample into an angle. It happens to use a complementary filter, hence the name. This works by low passing the somewhat noisy accelerometer data, and high passing the gyroscope data to correct for drift, then adding them together.

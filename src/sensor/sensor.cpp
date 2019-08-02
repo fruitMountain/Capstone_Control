@@ -5,8 +5,6 @@
 sample record[historyLen];
 int8_t counter = 0;
 
-float angle = 0;
-
 
 //Turns on the MPU and wets the sample history.
 void mpuSetup () {
@@ -70,7 +68,7 @@ void mpuSetup () {
 #endif
 
   //Fill up the "record" vector.
-  for (int i=0; i <= 5; i++) {
+  for (int i=0; i <= historyLen; i++) {
     switchSample();
   }
 
